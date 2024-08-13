@@ -1,0 +1,29 @@
+generator client {
+  provider = "prisma-client-js"
+  previewFeatures = ["multiSchema"]
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+  schemas  = ["public", "tenant_template"]
+}
+
+model User {
+  id        String   @id @default(uuid())
+  email     String   @unique
+  password  String
+  tenantId  String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@schema("public")
+}
+
+model TenantLogin {
+  id        String   @id @default(uuid())
+  userId    String
+  loginTime DateTime @default(now())
+
+  @@schema("tenant_template")
+}
